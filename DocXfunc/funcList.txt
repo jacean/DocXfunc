@@ -8,3 +8,88 @@
 8. Paragraph创建，属性-例如Indent
 9. 新一页控制
 10. 邮件合并-MailMerge 
+
+
+
+ellipse 0  
+ triangle 1  
+ rt Triangle 2  
+ parallelogram 3  
+ trapezoid 4  
+ diamond 5  
+ pentagon 6  
+ hexagon 7  
+ heptagon 8  
+ octagon 9  
+ decagon 10  
+ dodecagon 11  
+ pie 12  
+ chord 13  
+ teardrop 14  
+ frame 15  
+ half Frame 16  
+ corner 17  
+ diag Stripe 18  
+ plus 19  
+ plaque 20  
+ can 21  
+ cube 22  
+ bevel 23  
+ donut 24  
+ noSmoking 25  
+ block Arc 26  
+ folded Corner 27  
+ smiley Face 28  
+ heart 29  
+ lightningBolt 30  
+ sun 31  
+ moon 32  
+ cloud 33  
+ arc 34  
+ backet Pair 35  
+ brace Pair 36  
+ leftBracket 37  
+ rightBracket 38  
+ left  Brace 39  
+ right  Brace 40 
+ 椭圆0
+三角1
+大三角2
+平行四边形3
+梯形4
+钻石5
+五角大厦6
+六角7
+七边形8
+八角9
+角形10
+十二边形11
+饼12
+和弦13
+泪滴14
+帧15
+半帧16
+角落17
+图18条纹
+加上19
+斑块20
+可以21
+立方体22
+斜角23
+甜甜圈24
+25不吸烟
+块弧26
+折角27
+笑脸28
+心29
+闪电30
+太阳31
+月32
+云33
+弧弧34
+双筒35
+撑对36
+leftbracket 37
+右托架38
+左括号39
+右撑40

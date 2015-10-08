@@ -60,5 +60,10 @@ namespace DocXfunc
         {
             DocXClass.addNewpage(file);
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DocXClass.addPicture(file);
+        }
     }
 }

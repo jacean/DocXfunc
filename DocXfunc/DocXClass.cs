@@ -185,8 +185,9 @@ namespace DocXfunc
                
                 Paragraph newP = document.InsertParagraph();
                 newP.Append(content)
-                    .Font(font.FontFamily)
-                    .FontSize(font.Size);
+                    .Font(new FontFamily(font.Name))
+                    .FontSize((double)11.5)
+                    .IndentationFirstLine=2;
             }
             
 
@@ -214,14 +215,15 @@ namespace DocXfunc
             document.Save();
         }
 
-        public static void addTable(string docx,int row,int col,string[] colHeader)
+        #region table
+        public static void addTable(string docx, int row, int col, string[] colHeader)
         {
             if (!File.Exists(docx))
             {
                 MessageBox.Show(docx + "文件不存在");
                 return;
             }
-            if(col>colHeader.Length)
+            if (col > colHeader.Length)
             {
                 MessageBox.Show("列标题少于给定的列数目");
                 return;
@@ -229,7 +231,7 @@ namespace DocXfunc
             using (DocX document = DocX.Load(docx))
             {
                 // Create a new Table with 2 coloumns and 3 rows.
-                Table newTable = document.InsertTable(row,col);
+                Table newTable = document.InsertTable(row, col);
 
                 // Set the design of this Table.
                 //newTable.Design = TableDesign.Custom;//传统样式，但是没有表格线
@@ -241,42 +243,44 @@ namespace DocXfunc
                 {
                     newTable.Rows[0].Cells[i].Paragraphs.First().InsertText(colHeader[i], false);
                 }
-                
-                               
+
+
                 document.Save();
             }// Release this document from memory.
         }
         public static DocX getDocx(string docx)
         {
-            
+
             DocX document = DocX.Load(docx);
-            
-                return document;
-           
+
+            return document;
+
         }
         public static void saveTable(ref DocX document)
         {
             document.Save();
         }
-        public static Table[] getTables( DocX document)
+        public static Table[] getTables(DocX document)
         {
-            
-                List<Table> ts = new List<Table>();
-                ts = null;
-                ts = document.Tables;
-                return ts.ToArray<Table>();
-              
-            
+
+            List<Table> ts = new List<Table>();
+            ts = null;
+            ts = document.Tables;
+            return ts.ToArray<Table>();
+
+
         }
-        public static void setCellvalue(  Table t,int rowindex,int colindex,string value)
+        public static void setCellvalue(Table t, int rowindex, int colindex, string value)
         {
             t.Rows[rowindex].Cells[colindex].Paragraphs.First().InsertText(value, false);
         }
-        public static void setTablestyle(Table t,string style,string value)
+        public static void setTablestyle(Table t, string style, string value)
         {
+            //t.Rows[rowindex].Cells[colindex].FillColor = Color.AliceBlue;
+            //t.Rows[rowindex].Cells[colindex].Paragraphs.First().Append(value).Color(Color.Black);
 
         }
-      
+
         /// <summary>
         /// 合并单元格
         /// </summary>
@@ -285,7 +289,7 @@ namespace DocXfunc
         /// <param name="index">合并行或列的索引</param>
         /// <param name="startIndex">开始的索引</param>
         /// <param name="endIndex">结束的索引</param>
-        public static void mergeCells(Table t,bool isRows,int index,int startIndex,int endIndex)
+        public static void mergeCells(Table t, bool isRows, int index, int startIndex, int endIndex)
         {
             if (isRows)
             {
@@ -296,7 +300,50 @@ namespace DocXfunc
                 t.MergeCellsInColumn(index, startIndex, endIndex);
             }
         }
+        #endregion
 
+        public static void addPicture(string docx)
+        {
+            // Create a document using a relative filename.
+            using (DocX document = DocX.Load(docx))
+            {
+                // Add a new Paragraph to this document.
+                Paragraph p = document.InsertParagraph("Here is Picture 1", false);
+
+                // Add an Image to this document.但是并没有把图片插入到文档里
+                //插入到文档的得是由image创建的pic
+                Novacode.Image img = document.AddImage(@"ning24.jpg");
+
+                Picture pic = img.CreatePicture();
+
+                // Insert pic at the start of Paragraph p.
+                 p.InsertPicture(pic);
+
+                // Rotate the Picture clockwise by 30 degrees. 
+                //pic.Rotation = 10;
+
+                // Resize the Picture.
+                pic.Width = 400;
+                pic.Height = 300;
+
+                // Set the shape of this Picture to be a cube.
+                //pic.SetPictureShape(BasicShapes.cube);//cube 立方体
+                //不设置shape就是默认的矩形
+                // Flip the Picture Horizontally.
+                pic.FlipHorizontal = true;
+
+                Image img1= document.AddImage(@"ning15.jpg");
+                Picture pic1 = img1.CreatePicture();
+               document.InsertParagraph().AppendPicture(pic1);
+                //pic1.SetPictureShape(BasicShapes.diagStripe);//斜梯形
+                //pic1.SetPictureShape(BasicShapes.sun);//太阳型
+                //pic1.SetPictureShape(BasicShapes.can);//圆柱
+                pic1.SetPictureShape(BasicShapes.cube);
+                // Save all changes made to this document.
+                document.Save();
+            }// Release this document from memory.
+
+        }
         public static void addNewpage(string docx)
         {
             if (!File.Exists(docx))
