@@ -18,6 +18,7 @@ namespace DocXfunc
             return (!File.Exists(file));
            
         }
+        //创建新文件
         public static void createDoc()
         {
             createDoc(Application.StartupPath+@"\DocX\","newDocx.docx");
@@ -28,6 +29,9 @@ namespace DocXfunc
             
             createDoc(@Path, "newDocx.docx");
         }
+
+        //DocXClass.createDoc("F:\\","example.doc");
+    
         public static void createDoc(string Path,String Name)
         {
             if (!Directory.Exists(Path))
@@ -56,6 +60,8 @@ namespace DocXfunc
                 //Console.WriteLine("\tCreated: docs\\Hello World.docx\n");
             }
         }
+        //设置页眉页脚
+        //        DocXClass.setHeaderFooter("F:\\example.docx","header","footer");
         public static void setHeaderFooter(string docx,string headerstr,string footerstr)
         {
             if (!File.Exists(docx))
@@ -149,16 +155,7 @@ namespace DocXfunc
             
             p_header.Append(headerstr);//在此处设置格式
             p_header.Alignment = Alignment.center;
-            //试图给页眉加下边框，然而失败了
-            //header.Paragraphs[0].Remove(false);
-            //Table t = header.InsertTable(1,1);
             
-            //t.Rows[0].Cells[0].Paragraphs.First().InsertText(headerstr);
-            //t.Rows[0].Cells[0].Paragraphs.First().Alignment = Alignment.center;
-            //t.Rows[0].Cells[0].SetBorder(TableCellBorderType.Bottom, new Border(Novacode.BorderStyle.Tcbs_single, BorderSize.one, 1, Color.Black));
-
-          //document.Headers.even = header;
-          //document.Headers.odd = header;
           Footer footer = document.Footers.odd;
             Paragraph p_footer = footer.Paragraphs.First();
             p_footer.Append(footerstr);
@@ -169,7 +166,7 @@ namespace DocXfunc
             document.Save();
 
         }
-
+        //添加新段落
         public static void addParagraph(string docx,string content)
         {
             if (!File.Exists(docx))
@@ -186,14 +183,15 @@ namespace DocXfunc
                 Paragraph newP = document.InsertParagraph();
                 newP.Append(content)
                     .Font(new FontFamily(font.Name))
-                    .FontSize((double)11.5)
-                    .IndentationFirstLine=2;
+                    .FontSize(font.Size)//如果是小数的话就会报错
+                    .IndentationFirstLine=2;//设置缩进的
             }
             
 
             document.Save();
                 
         }
+        //在最后一段加文字
         public static void addText(string docx, string content)
         {
             if (!File.Exists(docx))
@@ -216,6 +214,19 @@ namespace DocXfunc
         }
 
         #region table
+        /*使用起来就比较麻烦如果这样弄出来
+         DocXClass.addTable(file,3,3,new string[] { "1","2","3"});
+            DocX document = DocXClass.getDocx(file);
+            Table t= DocXClass.getTables( document)[0];
+            
+            DocXClass.setCellvalue( t, 1, 0, "a");
+            DocXClass.setCellvalue(  t, 1, 1, "b");
+            DocXClass.setCellvalue( t, 1, 2, "c");
+            DocXClass.mergeCells( t, true, 2, 0, 2);
+            DocXClass.setCellvalue( t,2,0,"merge
+            DocXClass.saveTable(ref document);
+    */
+        //添加表格，其实可以只需要行列数就行，列标题都可以之后再设置
         public static void addTable(string docx, int row, int col, string[] colHeader)
         {
             if (!File.Exists(docx))
@@ -260,6 +271,7 @@ namespace DocXfunc
         {
             document.Save();
         }
+        //获取文档中的所有表格，tables[i]
         public static Table[] getTables(DocX document)
         {
 
@@ -270,10 +282,12 @@ namespace DocXfunc
 
 
         }
+        //设置单元格值
         public static void setCellvalue(Table t, int rowindex, int colindex, string value)
         {
             t.Rows[rowindex].Cells[colindex].Paragraphs.First().InsertText(value, false);
         }
+        //设置单元格样式，感觉通过获取表格来直接设置就好，不然对属性和值不能确定
         public static void setTablestyle(Table t, string style, string value)
         {
             //t.Rows[rowindex].Cells[colindex].FillColor = Color.AliceBlue;
@@ -301,49 +315,39 @@ namespace DocXfunc
             }
         }
         #endregion
-
-        public static void addPicture(string docx)
+        //插入图片,插入的位置可以调整的，不过这里没写
+        public static void addPicture(string docx,string imgpath)
         {
             // Create a document using a relative filename.
             using (DocX document = DocX.Load(docx))
             {
-                // Add a new Paragraph to this document.
-                Paragraph p = document.InsertParagraph("Here is Picture 1", false);
-
+                
                 // Add an Image to this document.但是并没有把图片插入到文档里
                 //插入到文档的得是由image创建的pic
-                Novacode.Image img = document.AddImage(@"ning24.jpg");
+                
 
-                Picture pic = img.CreatePicture();
-
-                // Insert pic at the start of Paragraph p.
-                 p.InsertPicture(pic);
-
-                // Rotate the Picture clockwise by 30 degrees. 
+                // 设置旋转度数 
                 //pic.Rotation = 10;
 
-                // Resize the Picture.
-                pic.Width = 400;
-                pic.Height = 300;
+                // 设置大小.
+                //pic.Width = 400;
+                //pic.Height = 300;
 
-                // Set the shape of this Picture to be a cube.
+                // 设置形状.
                 //pic.SetPictureShape(BasicShapes.cube);//cube 立方体
                 //不设置shape就是默认的矩形
                 // Flip the Picture Horizontally.
-                pic.FlipHorizontal = true;
+               // pic.FlipHorizontal = true;
 
-                Image img1= document.AddImage(@"ning15.jpg");
+                Image img1= document.AddImage(imgpath);
                 Picture pic1 = img1.CreatePicture();
                document.InsertParagraph().AppendPicture(pic1);
-                //pic1.SetPictureShape(BasicShapes.diagStripe);//斜梯形
-                //pic1.SetPictureShape(BasicShapes.sun);//太阳型
-                //pic1.SetPictureShape(BasicShapes.can);//圆柱
-                pic1.SetPictureShape(BasicShapes.cube);
-                // Save all changes made to this document.
+                
                 document.Save();
             }// Release this document from memory.
 
         }
+        //添加新的一页
         public static void addNewpage(string docx)
         {
             if (!File.Exists(docx))

@@ -63,7 +63,7 @@ namespace DocXfunc
 
         private void button6_Click(object sender, EventArgs e)
         {
-            DocXClass.addPicture(file);
+            DocXClass.addPicture(file,@"ning24.jpg");
         }
     }
 }
